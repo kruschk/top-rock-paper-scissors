@@ -1,74 +1,108 @@
 "use strict";
-const choices = ["paper", "rock", "scissors"];
+
+const final = document.querySelector("#final");
+const rounds = document.querySelector("#rounds");
 
 let computerScore = 0;
-let humanScore = 0;
+let playerScore = 0;
 
-const getComputerChoice = () => choices[Math.floor(3 * Math.random())];
-const getHumanChoice = () => window.prompt("Enter rock, paper, or scissors.")
-                                   .toLowerCase();
+function appendRound(message) {
+    const round = document.createElement("li");
+    round.textContent = message;
+    rounds.appendChild(round);
+}
 
-function playRound(computerChoice, humanChoice) {
-    if (computerChoice === humanChoice) {
-        console.log("It's a tie!");
+function disableButtons() {
+    document.querySelectorAll("menu > li > button")
+            .values()
+            .forEach(button => {
+                if (button.id !== "reset") {
+                    button.setAttribute("disabled", "")
+                }
+            });
+}
+
+function playRound(computerChoice, playerChoice) {
+    if (computerChoice === playerChoice) {
+        appendRound("It's a tie!");
         return;
     }
-
     switch (computerChoice) {
         case "paper":
-            switch (humanChoice) {
+            switch (playerChoice) {
                 case "rock":
-                    console.log("Paper beats rock; you lose.");
+                    appendRound("Paper beats rock; you lose.");
                     computerScore++;
                     break;
                 case "scissors":
-                    console.log("Scissors beat paper; you win!");
-                    humanScore++;
+                    appendRound("Scissors beat paper; you win!");
+                    playerScore++;
                     break;
             }
             break;
         case "rock":
-            switch (humanChoice) {
+            switch (playerChoice) {
                 case "paper":
-                    console.log("Paper beats rock; you win!");
-                    humanScore++;
+                    appendRound("Paper beats rock; you win!");
+                    playerScore++;
                     break;
                 case "scissors":
-                    console.log("Rock beats scissors; you lose.");
+                    appendRound("Rock beats scissors; you lose.");
                     computerScore++;
                     break;
             }
             break;
         case "scissors":
-            switch (humanChoice) {
+            switch (playerChoice) {
                 case "paper":
-                    console.log("Scissors beat paper; you lose.");
+                    appendRound("Scissors beat paper; you lose.");
                     computerScore++;
                     break;
                 case "rock":
-                    console.log("Rock beats scissors; you win!");
-                    humanScore++;
+                    appendRound("Rock beats scissors; you win!");
+                    playerScore++;
                     break;
             }
             break;
     }
-}
 
-function playGame() {
-    computerScore = 0;
-    humanScore = 0;
-
-    for (let round = 0; round < 5; round++) {
-        playRound(getComputerChoice(), getHumanChoice());
-    }
-
-    if (computerScore < humanScore) {
-        console.log("Congratulations, you win!");
-    } else if (computerScore === humanScore) {
-        console.log("Looks like it's a draw!");
-    } else {
-        console.log("Sorry, the computer wins this one.");
+    // Check for a winner and stop the game if appropriate.
+    if (5 <= computerScore) {
+        final.textContent = "Sorry, the computer wins this one.";
+        disableButtons();
+    } else if (5 <= playerScore) {
+        final.textContent = "Congratulations, you win!";
+        disableButtons();
     }
 }
 
-playGame();
+// Delegate the player's selection (click event) to the menu element instead of
+// adding an event listener to each button.
+document.querySelector("menu").addEventListener("click", (event) => {
+    const choices = ["paper", "rock", "scissors"];
+    const computerChoice = choices[Math.floor(3 * Math.random())];
+    switch (event.target.id) {
+        case "rock":
+            playRound(computerChoice, "rock");
+            break;
+        case "paper":
+            playRound(computerChoice, "paper");
+            break;
+        case "scissors":
+            playRound(computerChoice, "scissors");
+            break;
+        case "reset":
+            computerScore = 0;
+            playerScore = 0;
+            while (rounds.firstChild) {
+                rounds.removeChild(rounds.firstChild);
+            }
+            final.textContent = "";
+            document.querySelectorAll("menu > li > button")
+                    .values()
+                    .forEach(button => button.removeAttribute("disabled"));
+            break;
+    }
+    computerScoreboard.textContent = computerScore.toString();
+    playerScoreboard.textContent = playerScore.toString();
+});

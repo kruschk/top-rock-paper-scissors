@@ -1,0 +1,17 @@
+button {
+    margin: 0 4px;
+}
+
+menu {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+}
+
+.scoreboard {
+    display: flex;
+}
+
+.scoreboard > div {
+    margin: 0 8px;
+}

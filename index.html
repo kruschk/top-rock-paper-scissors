@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <link href="./style.css" rel="stylesheet" />
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script defer src="./javascript.js"></script>
@@ -8,6 +9,17 @@
     </head>
     <body>
         <h1>Rock, paper, scissors</h1>
-        <p>Open up the JavaScript console to play!</p>
+        <menu>
+            <li><button id="rock">Rock</button></li>
+            <li><button id="paper">Paper</button></li>
+            <li><button id="scissors">Scissors</button></li>
+            <li><button id="reset">Reset</button></li>
+        </menu>
+        <div class="scoreboard">
+            <div>Computer score: <span id="computerScoreboard">0</span></div>
+            <div>Player score: <span id="playerScoreboard">0</span></div>
+        </div>
+        <ol id="rounds"></ol>
+        <div id="final"></div>
     </body>
 </html>
